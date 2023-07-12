@@ -6,9 +6,16 @@ import {
   Flex,
   Text,
   Button,
-  useDisclosure
+  useDisclosure,
+  Link,
+  textDecoration,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Menu,
+  Image,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 const Navbar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,24 +43,45 @@ const Navbar = (props) => {
 
       <Stack
         direction={{ base: "column", md: "row" }}
-        display={{ base: isOpen ? "block" : "none", md: "flex" }}
+        display={{ base: isOpen ? "block" : "none", md: "flex", lg: "flex" }}
         width={{ base: "full", md: "auto" }}
         alignItems="center"
         flexGrow={1}
         mt={{ base: 4, md: 0 }}
       >
-        <Text>Docs</Text>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <Text>Home</Text>
+        </Link>
         <Text>Examples</Text>
-        <Text>Blog</Text>
+        <Menu>
+          <MenuButton rightIcon={<ChevronDownIcon />}>
+            Manage Records
+          </MenuButton>
+          <MenuList>
+            <MenuItem minH="48px">
+              <Link href="/managerecords" style={{ textDecoration: "none" }}>
+                <span>Manage User</span>
+              </Link>
+            </MenuItem>
+            <MenuItem minH="48px">
+              <Link style={{ textDecoration: "none" }}>
+                <span>Manage Cattle</span>
+              </Link>
+            </MenuItem>
+            <MenuItem minH="48px">
+              <Link style={{ textDecoration: "none" }}>
+                <span>Manage Subscription</span>
+              </Link>
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Stack>
 
       <Box
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
-        <Button>
-          Create account
-        </Button>
+        <Button>Create account</Button>
       </Box>
     </Flex>
   );
