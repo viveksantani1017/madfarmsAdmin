@@ -16,8 +16,10 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = (props) => {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleToggle = () => (isOpen ? onClose() : onOpen());
 
@@ -54,7 +56,7 @@ const Navbar = (props) => {
         </Link>
         <Text>Examples</Text>
         <Menu>
-          <MenuButton rightIcon={<ChevronDownIcon />}>
+          <MenuButton>
             Manage Records
           </MenuButton>
           <MenuList>
@@ -81,7 +83,7 @@ const Navbar = (props) => {
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
-        <Button>Create account</Button>
+        <Button onClick={()=>{navigate('/login')}}>Login</Button>
       </Box>
     </Flex>
   );

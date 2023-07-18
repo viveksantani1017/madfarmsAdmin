@@ -17,8 +17,9 @@ import {
   Select,
   Tooltip,
   Button,
+  Tfoot,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { AddIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
   flexRender,
@@ -34,6 +35,7 @@ import {
   MdSkipNext,
   MdSkipPrevious,
 } from "react-icons/md";
+import exportFromJSON from "export-from-json";
 
 export type DataTableProps<Data extends object> = {
   data: Data[];
@@ -56,11 +58,17 @@ export function DataTable<Data extends object>({
     },
     getPaginationRowModel: getPaginationRowModel(),
   });
+  const fileName = "Cattle records";
+  const exportType = "xls";
+  console.log(data);
+  const exportToExcel = () => {
+    exportFromJSON({ data, fileName, exportType });
+  };
 
   return (
     <>
-      <Box w="100%" h="400px" overflowY="auto">
-        <Table variant="striped">
+      <Box w="100%" h="350px" overflowY="auto">
+        <Table variant="striped" >
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
@@ -72,6 +80,9 @@ export function DataTable<Data extends object>({
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                       isNumeric={meta?.isNumeric}
+                      // position={"sticky"}
+                      // top="0"
+                      // bg="gray.100"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -111,46 +122,79 @@ export function DataTable<Data extends object>({
               </Tr>
             ))}
           </Tbody>
+          <Tfoot>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
+                  const meta: any = header.column.columnDef.meta;
+                  return (
+                    <Th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      isNumeric={meta?.isNumeric}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+
+                      <chakra.span pl="4">
+                        {header.column.getIsSorted() ? (
+                          header.column.getIsSorted() === "desc" ? (
+                            <TriangleDownIcon aria-label="sorted descending" />
+                          ) : (
+                            <TriangleUpIcon aria-label="sorted ascending" />
+                          )
+                        ) : null}
+                      </chakra.span>
+                    </Th>
+                  );
+                })}
+              </Tr>
+            ))}
+          </Tfoot>
         </Table>
       </Box>
       <Flex
         width={"100%"}
         rounded="md"
-        boxShadow= "2px 2px 2px 2px rgba(0.2, 0, 0, 0.2)"
+        boxShadow="2px 2px 2px 2px rgba(0.2, 0, 0, 0.2)"
         justifyContent={"space-evenly"}
         alignItems={"center"}
+        mt="5"
       >
         <Tooltip label="Go To First Page" hasArrow>
-        <IconButton
-          aria-label="first page"
-          icon={<MdFirstPage />}
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        />
+          <IconButton
+            aria-label="first page"
+            icon={<MdFirstPage />}
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          />
         </Tooltip>
         <Tooltip label="Go To Previous Page" hasArrow>
-        <IconButton
-          aria-label="previous page"
-          icon={<MdSkipPrevious />}
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        />
+          <IconButton
+            aria-label="previous page"
+            icon={<MdSkipPrevious />}
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          />
         </Tooltip>
         <Tooltip label="Go To Next Page" hasArrow>
-        <IconButton
-          aria-label="next page"
-          icon={<MdSkipNext />}
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        />
+          <IconButton
+            aria-label="next page"
+            icon={<MdSkipNext />}
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          />
         </Tooltip>
         <Tooltip label="Go To Last Page" hasArrow>
-        <IconButton
-          aria-label="last page"
-          icon={<MdLastPage />}
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        />
+          <IconButton
+            aria-label="last page"
+            icon={<MdLastPage />}
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          />
         </Tooltip>
         <span className="flex items-center gap-1">
           <div>Page</div>
@@ -159,21 +203,17 @@ export function DataTable<Data extends object>({
             {table.getPageCount()}
           </strong>
         </span>
-        
-        <FormControl 
-        display="flex"
-        alignItems="center"
-        w="20%"
-        >
-        <FormLabel size="sm">Go To Page:</FormLabel>
-        <Input
-          type="number"
-          defaultValue={table.getState().pagination.pageIndex + 1}
-          onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-            table.setPageIndex(page);
-          }}
-        />
+
+        <FormControl display="flex" alignItems="center" w="20%">
+          <FormLabel size="sm">Go To Page:</FormLabel>
+          <Input
+            type="number"
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+          />
         </FormControl>
         <Select
           w="10%"
@@ -182,13 +222,13 @@ export function DataTable<Data extends object>({
             table.setPageSize(Number(e.target.value));
           }}
         >
-          {[5, 10, 20, 30, 40,50,100,500,1000].map((pageSize) => (
+          {[5, 10, 20, 30, 40, 50, 100, 500, 1000].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
           ))}
         </Select>
-        <Button>Export Data</Button>
+        <Button onClick={exportToExcel}>Export Data</Button>
         {/* <div>{table.getRowModel().rows.length} Rows</div> */}
         {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
       </Flex>

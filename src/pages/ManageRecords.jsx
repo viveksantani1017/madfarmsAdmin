@@ -27,9 +27,14 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 const ManageRecords = () => {
   const initialRef = useRef(null);
+  const {
+    isOpen: isInsertOpen,
+    onOpen: onInsertOpen,
+    onClose: onInsertClose,
+  } = useDisclosure();
   const {
     isOpen: isViewOpen,
     onOpen: onViewOpen,
@@ -46,6 +51,21 @@ const ManageRecords = () => {
     onClose: onDeleteClose,
   } = useDisclosure();
 
+  // export to xls
+
+  const fileName = "Cattle records";
+  const exportType = "xls";
+
+  const data2 = [
+    {
+      srNo: "1",
+      name: "Abc",
+      color: "Brown",
+      gender: "female",
+      dob: "20-10-2012",
+    },
+  ];
+
   const data = [
     {
       srNo: 1,
@@ -60,7 +80,13 @@ const ManageRecords = () => {
           colorScheme="green"
         />
       ),
-      edit: <IconButton onClick={onEditOpen} icon={<EditIcon />} colorScheme="blue" />,
+      edit: (
+        <IconButton
+          onClick={onEditOpen}
+          icon={<EditIcon />}
+          colorScheme="blue"
+        />
+      ),
       delete: (
         <IconButton
           onClick={onDeleteOpen}
@@ -75,9 +101,11 @@ const ManageRecords = () => {
       color: "Brown",
       gender: "female",
       dob: "20-10-2012",
-      view: <IconButton icon={<ViewIcon />} colorScheme="green" />,
-      edit: <IconButton icon={<EditIcon />} colorScheme="blue" />,
-      delete: <IconButton icon={<DeleteIcon />} colorScheme="red" />,
+      view: <IconButton zIndex={-1} icon={<ViewIcon />} colorScheme="green" />,
+      edit: <IconButton zIndex={-1} icon={<EditIcon />} colorScheme="blue" />,
+      delete: (
+        <IconButton zIndex={-1} icon={<DeleteIcon />} colorScheme="red" />
+      ),
     },
     {
       srNo: 1,
@@ -527,7 +555,9 @@ const ManageRecords = () => {
       header: "Delete",
     }),
   ];
-
+  // const exportToExcel = () => {
+  //   exportFromJSON({ data, fileName, exportType });
+  // };
   return (
     <>
       <Flex
@@ -536,7 +566,7 @@ const ManageRecords = () => {
         paddingRight="10%"
         paddingTop="1%"
       >
-        <VStack width="100%"  gap="10">
+        <VStack width="100%">
           <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
             <Text
               as={"span"}
@@ -558,9 +588,74 @@ const ManageRecords = () => {
               Cattles
             </Text>{" "}
           </Heading>
-          <DataTable  data={data} columns={columns} />
+          <Flex width={"100%"} flexDirection={"column"}>
+            <Button
+              colorScheme="blue"
+              leftIcon={<AddIcon />}
+              alignSelf={"end"}
+              marginRight={"10"}
+              marginTop={"10"}
+              onClick={onInsertOpen}
+            >
+              Insert
+            </Button>
+            <DataTable data={data} columns={columns} />
+          </Flex>
         </VStack>
       </Flex>
+
+      {/* Insert Modal */}
+
+      <Modal
+        scrollBehavior="inside"
+        initialFocusRef={initialRef}
+        isOpen={isInsertOpen}
+        onClose={onInsertClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Insert New Cattle Record</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input ref={initialRef} value="Abc" />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Gender</FormLabel>
+              <Input value="female" />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3}>
+              Add
+            </Button>
+            <Button onClick={onInsertClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       {/* View Modal */}
 
@@ -634,7 +729,7 @@ const ManageRecords = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Update Cattle Detials</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
