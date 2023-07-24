@@ -7,7 +7,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  HStack,
   Heading,
   IconButton,
   Input,
@@ -20,17 +19,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Text,
   VStack,
-  calc,
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
-import axios from "axios";
 import { useGetAllProductsQuery} from '../api/productSlice'
-const ManageRecords = () => {
+const ManageCattles = () => {
   const initialRef = useRef(null);
   const {
     isOpen: isInsertOpen,
@@ -61,31 +57,7 @@ const ManageRecords = () => {
   // const [productData,setProductData] = useState();
 
   const { isError,isLoading,isSuccess,data:prData } = useGetAllProductsQuery();
-
-  
   console.log(prData)
-
-  // axios get for all products
-  // useEffect(()=>{
-  //   const getProductData = async () =>{
-  //     const data = await axios.get("http://localhost:5000/api/products");
-  //     setProductData(data.data);
-  //   };
-  //   getProductData();
-  // },[])
-
-  // console.log(productData)  
-
-  const data2 = [
-    {
-      srNo: "1",
-      name: "Abc",
-      color: "Brown",
-      gender: "female",
-      dob: "20-10-2012",
-    },
-  ];
-
   const data = [
     {
       srNo: 1,
@@ -539,9 +511,6 @@ const ManageRecords = () => {
     },
   ];
 
-
-
-
   const columnHelper = createColumnHelper();
 
   const columns = [
@@ -616,7 +585,7 @@ const ManageRecords = () => {
               Manage
             </Text>{" "}
             <Text color={"blue.400"} as={"span"}>
-              Products
+              Cattles
             </Text>{" "}
           </Heading>
           <Flex width={"100%"} flexDirection={"column"}>
@@ -827,4 +796,4 @@ const ManageRecords = () => {
   );
 };
 
-export default ManageRecords;
+export default ManageCattles;

@@ -10,7 +10,7 @@ const App = () => {
       <Pages/>
       <Footer/>
     </>
-  )
+  ) 
 }
 
 export default App

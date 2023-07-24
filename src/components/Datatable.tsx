@@ -60,7 +60,7 @@ export function DataTable<Data extends object>({
   });
   const fileName = "Cattle records";
   const exportType = "xls";
-  console.log(data);
+  // console.log(data);
   const exportToExcel = () => {
     exportFromJSON({ data, fileName, exportType });
   };

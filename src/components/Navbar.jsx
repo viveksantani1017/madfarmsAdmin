@@ -14,6 +14,7 @@ import {
   MenuItem,
   Menu,
   Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
@@ -29,13 +30,15 @@ const Navbar = (props) => {
       align="center"
       justify="space-between"
       wrap="wrap"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      color={useColorModeValue('gray.700', 'gray.200')}
       shadow={"md"}
       padding={6}
       {...props}
     >
       <Flex align="center" mr={5}>
         <Heading as="h1" size="lg" letterSpacing={"tighter"}>
-          Madfarms
+          Madfarm
         </Heading>
       </Flex>
 
@@ -66,7 +69,7 @@ const Navbar = (props) => {
               </Link>
             </MenuItem>
             <MenuItem minH="48px">
-              <Link style={{ textDecoration: "none" }}>
+              <Link  href="/managecattles" style={{ textDecoration: "none" }}>
                 <span>Manage Cattle</span>
               </Link>
             </MenuItem>
